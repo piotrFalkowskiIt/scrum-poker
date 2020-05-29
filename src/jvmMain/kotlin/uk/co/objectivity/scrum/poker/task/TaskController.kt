@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/task")
 @RestController
-class TaskController(val taskRepository: TaskRepository) {
+class TaskController(val taskRepository: TaskRepository,
+                     val taskEstimationRepository: TaskEstimationRepository) {
 
     @GetMapping("/{id}")
     fun getTaskSummary(@PathVariable id: Long) = taskRepository.findById(id)
@@ -24,8 +25,8 @@ class TaskController(val taskRepository: TaskRepository) {
     @PostMapping("/{id}/estimation")
     fun addTaskEstimation(@PathVariable id: Long, @RequestBody taskEstimation: TaskEstimation) {
         taskRepository.findById(id).ifPresent {
-            it.estimations.add(taskEstimation);
-            taskRepository.save(it)
+            taskEstimation.task = it
+            taskEstimationRepository.save(taskEstimation)
         }
     }
 
