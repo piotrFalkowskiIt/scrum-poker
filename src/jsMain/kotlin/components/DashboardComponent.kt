@@ -1,5 +1,6 @@
 package components
 
+import components.dashboard.voteComponent
 import react.RBuilder
 import react.RComponent
 import react.RProps
@@ -12,6 +13,10 @@ class DashboardComponent : RComponent<RProps, RState>() {
             +"dashboard component"
         }
         createTaskComponent()
+        voteComponent {
+            taskName = "TASK NAME"
+            taskId = "ID"
+        }
     }
 
 }
