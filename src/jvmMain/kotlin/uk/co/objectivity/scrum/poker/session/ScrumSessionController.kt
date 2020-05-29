@@ -4,7 +4,8 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController("/session")
-class ScrumSessionController (val sessionRepository: SessionRepository) {
+class ScrumSessionController (
+        val sessionRepository: SessionRepository) {
 
     @PostMapping
     fun createSession() : ScrumSession {
@@ -15,9 +16,8 @@ class ScrumSessionController (val sessionRepository: SessionRepository) {
 
     @GetMapping("/{id}")
     fun testGetSession(@PathVariable("id") sessionId: UUID) : ScrumSession {
-        val testId = UUID.randomUUID()
-        return ScrumSession(testId)
-        //sessionRepository.findById(sessionId).orElseGet { "Session not found!" }
+        return ScrumSession(UUID.randomUUID());
+        //return sessionRepository.findById(sessionId).orElseGet { "Session not found!" }
     }
 
 }
