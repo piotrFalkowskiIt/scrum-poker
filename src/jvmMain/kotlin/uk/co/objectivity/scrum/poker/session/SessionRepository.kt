@@ -6,7 +6,8 @@ import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity class ScrumSession (
-        @Id val id: UUID
+        @Id val id: UUID,
+        val name: String
 )
 
-interface SessionRepository : JpaRepository<ScrumSession, UUID>
+internal interface SessionRepository : JpaRepository<ScrumSession, UUID>

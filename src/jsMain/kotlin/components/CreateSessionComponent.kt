@@ -17,6 +17,7 @@ import react.RState
 import react.dom.input
 import react.dom.p
 import kotlin.browser.window
+import kotlin.js.json
 
 data class SessionState(
         val name: String? = null,
@@ -33,9 +34,10 @@ class CreateSessionComponent : RComponent<RProps, SessionState>() {
 
     private fun createSessionAsync() = GlobalScope.async {
         state.name?.let { name ->
-            window.fetch("http://localhost:8080/api/sessions", RequestInit(
+            window.fetch("http://localhost:8080/api/session", RequestInit(
                     method = "POST",
-                    body = JSON.stringify(CreateSessionRequest(name))
+                    body = JSON.stringify(CreateSessionRequest(name)),
+                    headers = json("Content-Type" to "application/json;charset=UTF-8")
             ))
                     .await()
                     .json()
