@@ -8,7 +8,7 @@ import javax.persistence.*
         @Id
         @GeneratedValue val id: Long,
         val userName: String,
-        @ManyToOne(fetch = FetchType.LAZY) var session: ScrumSession
+        @ManyToOne(fetch = FetchType.LAZY) val session: ScrumSession
 )
 
-interface UserRepository : JpaRepository<User, Long>
+internal interface UserRepository : JpaRepository<User, Long>

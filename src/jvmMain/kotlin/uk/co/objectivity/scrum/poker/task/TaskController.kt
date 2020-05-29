@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/task")
 @RestController
-class TaskController(val taskRepository: TaskRepository,
+private class TaskController(val taskRepository: TaskRepository,
                      val taskEstimationRepository: TaskEstimationRepository) {
 
     @GetMapping("/{id}")

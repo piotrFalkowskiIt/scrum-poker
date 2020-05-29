@@ -11,6 +11,7 @@ class DashboardComponent : RComponent<RProps, RState>() {
         p {
             +"dashboard component"
         }
+        createTaskComponent()
     }
 
 }
