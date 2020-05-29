@@ -28,7 +28,7 @@ private val voteTiles = functionalComponent<VoteTilesProps> { p ->
         attrs {
             style = js {
                 width = "250px"
-                heigth = "100px"
+                heigth = "250px"
                 border = "1px solid #9c0d03"
                 textAlign = "center"
                 fontSize = "20px"
@@ -55,7 +55,7 @@ private val voteTiles = functionalComponent<VoteTilesProps> { p ->
                 }
             }
         } else {
-            + "Not this"
+            + "Choose Me"
         }
     }
 }
@@ -64,9 +64,10 @@ fun RBuilder.voteTiles(handler: VoteTilesProps.() -> Unit) = child(voteTiles) {
     attrs(handler)
 }
 
-class VoteComponent : RComponent<VoteComponentProps, VoteState> {
-    constructor(props: VoteComponentProps): super(props){
-        this.setState(VoteState(-1));
+class VoteComponent : RComponent<VoteComponentProps, VoteState>() {
+
+    override fun componentDidMount() {
+        this.setState(VoteState(-1))
     }
     private fun fibonacciSequence() = sequence {
         var terms = Pair(1, 2)
@@ -83,7 +84,7 @@ class VoteComponent : RComponent<VoteComponentProps, VoteState> {
         this.setState(VoteState(value))
     }
     private fun sendVote(){
-        this.state.currentVote;
+        this.state.currentVote
     }
     override fun RBuilder.render() {
         div {
@@ -95,17 +96,18 @@ class VoteComponent : RComponent<VoteComponentProps, VoteState> {
                     display = "flex"
                     flexDirection = "row"
                     border = "1px solid #9c0d03"
-                    maxWidth = "1010px"
+                    maxWidth = "800px"
                     flexWrap = "wrap"
                 }
                 fibonacci(7).map {
                     voteTiles {
                         value = it
-                        currentValue = 5
+                        currentValue = state.currentVote
                         changeValue = this@VoteComponent::updateVote
                         confirmVote = this@VoteComponent::sendVote
                     }
                 }
+
             }
         }
     }
