@@ -7,24 +7,33 @@ import org.springframework.web.bind.annotation.PathVariable
 import java.util.UUID
 import java.util.UUID.randomUUID
 
+
+sealed class Response {
+    data class SessionInfo (val id: UUID) : Response()
+    data class SessionError (val message: String) : Response()
+}
+
+val NOT_FOUND_RESPONSE = Response.SessionError("Session not found")
+
+
 @RestController
 class ScrumSessionController (
         val sessionRepository: SessionRepository) {
 
     @PostMapping("/session")
-    fun createSession() : SessionInfo {
-        val session = ScrumSession(randomUUID())
-        return sessionRepository.save(session).mapToInfo()
+    fun createSession() : Response {
+        return sessionRepository.save(newSession()).mapToInfo()
     }
 
     @GetMapping("/session/{id}")
-    fun testGetSession(@PathVariable("id") sessionId: UUID) : ScrumSession {
-        return ScrumSession(randomUUID())
-        //return sessionRepository.findById(sessionId).map { SessionInfo(this.id) }.orElseGet { "Session not found!" }
+    fun getSession(@PathVariable("id") sessionId: UUID) : Response {
+        return sessionRepository.findById(sessionId)
+                .map { it.mapToInfo() }
+                .orElseGet{ NOT_FOUND_RESPONSE }
     }
 
 }
 
-sealed class SessionResponse
-data class SessionInfo (val id: UUID) : SessionResponse()
-data class SessionError (val message: String) : SessionResponse()
+fun newSession() : ScrumSession {
+    return ScrumSession(randomUUID())
+}
