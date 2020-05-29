@@ -12,7 +12,7 @@ class App : RComponent<RProps, RState>() {
     override fun RBuilder.render() {
         hashRouter {
             switch {
-                route("/", CreateRoomComponent::class, exact = true)
+                route("/", CreateSessionComponent::class, exact = true)
                 route("/join", JoinRoomComponent::class, exact = true)
                 route("/dashboard", DashboardComponent::class, exact = true)
             }
