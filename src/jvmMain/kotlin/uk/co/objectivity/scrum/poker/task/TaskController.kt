@@ -6,17 +6,25 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import uk.co.objectivity.scrum.poker.session.SessionRepository
+import java.util.*
 
 @RequestMapping("/api/task")
 @RestController
 private class TaskController(val taskRepository: TaskRepository,
-                     val taskEstimationRepository: TaskEstimationRepository) {
+                             val taskEstimationRepository: TaskEstimationRepository,
+                             val sessionRepository: SessionRepository) {
 
     @GetMapping("/{id}")
     fun getTaskSummary(@PathVariable id: Long) = taskRepository.findById(id)
 
-    @PostMapping
-    fun createTask(@RequestBody task: Task) = taskRepository.save(task)
+    @PostMapping("/{sessionId}")
+    fun createTask(@PathVariable sessionId: UUID, @RequestBody task: Task) {
+        sessionRepository.findById(sessionId).ifPresent {
+            task.session = it
+            taskRepository.save(task)
+        }
+    }
 
     @GetMapping("/{id}/estimation")
     fun getTaskEstimations(@PathVariable id: Long): MutableList<TaskEstimation> =
@@ -31,3 +39,4 @@ private class TaskController(val taskRepository: TaskRepository,
     }
 
 }
+

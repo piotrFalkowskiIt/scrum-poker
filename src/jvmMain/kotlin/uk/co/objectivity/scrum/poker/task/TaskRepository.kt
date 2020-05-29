@@ -2,6 +2,7 @@ package uk.co.objectivity.scrum.poker.task
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.repository.CrudRepository
+import uk.co.objectivity.scrum.poker.session.ScrumSession
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -20,6 +21,7 @@ class TaskEstimation(
 class Task(
         val title: String,
         @OneToMany(mappedBy = "task") val estimations: MutableList<TaskEstimation> = mutableListOf(),
+        @ManyToOne @JoinColumn(name = "session_id") @JsonIgnore var session: ScrumSession? = null,
         @Id @GeneratedValue val id: Long? = null
 )
 
