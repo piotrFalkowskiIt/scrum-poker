@@ -19,13 +19,16 @@ import react.router.dom.redirect
 import kotlin.browser.window
 import kotlin.js.json
 
+data class CreateSessionRequest(val name: String)
+data class CreateSessionResponse(val id: String, val created: Number)
+
 data class SessionState(
         val name: String? = null,
         var error: String? = null,
-        var redirect: String? = null
+        val redirect: Boolean = false,
+        val response: CreateSessionResponse? = null
 ) : RState
 
-data class CreateSessionRequest(val name: String)
 
 class CreateSessionComponent : RComponent<RProps, SessionState>() {
 
@@ -43,15 +46,15 @@ class CreateSessionComponent : RComponent<RProps, SessionState>() {
             ))
                     .await()
                     .json()
-                    .then { setState(SessionState(redirect = "/join")) }
-                    .catch { error -> setState({ it.copy(error = error.toString())}) }
+                    .then { response -> setState(SessionState(redirect = true, response = response.unsafeCast<CreateSessionResponse>())) }
+                    .catch { error -> setState({ SessionState(error = error.toString()) }) }
         } ?: setState(SessionState(error = "Missing name"))
     }
 
 
     override fun RBuilder.render() {
-        if (state.redirect != null) {
-            redirect(to = state.redirect!!)
+        if (state.redirect) {
+            redirect(to = "/join/${state.response?.id}")
         } else {
             p {
                 +"Error: ${state.error}"

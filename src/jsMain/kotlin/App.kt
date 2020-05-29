@@ -14,7 +14,7 @@ class App : RComponent<RProps, RState>() {
         hashRouter {
             switch {
                 route("/", CreateSessionComponent::class, exact = true)
-                route("/join", JoinRoomComponent::class, exact = true)
+                route("/join", JoinRoomComponent::class, exact = false)
                 route("/dashboard", DashboardComponent::class, exact = true)
             }
         }
