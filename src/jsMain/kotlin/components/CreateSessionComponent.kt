@@ -27,7 +27,7 @@ data class CreateSessionRequest(val name: String)
 class CreateSessionComponent : RComponent<RProps, SessionState>() {
 
     private fun handleNameChange(event: Event) {
-        val name = (event.target as HTMLInputElement).value;
+        val name = (event.target as HTMLInputElement).value
         this.setState(SessionState(name))
     }
 
@@ -35,7 +35,7 @@ class CreateSessionComponent : RComponent<RProps, SessionState>() {
         state.name?.let { name ->
             window.fetch("http://localhost:8080/api/sessions", RequestInit(
                     method = "POST",
-                    body = CreateSessionRequest(name)
+                    body = JSON.stringify(CreateSessionRequest(name))
             ))
                     .await()
                     .json()
