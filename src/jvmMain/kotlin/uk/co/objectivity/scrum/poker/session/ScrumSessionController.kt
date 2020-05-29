@@ -13,20 +13,20 @@ sealed class Response {
     data class SessionError (val message: String) : Response()
 }
 
-val NOT_FOUND_RESPONSE = Response.SessionError("Session not found")
+private val NOT_FOUND_RESPONSE = Response.SessionError("Session not found")
 
 
 @RestController
-class ScrumSessionController (
+private class ScrumSessionController (
         val sessionRepository: SessionRepository) {
 
     @PostMapping("/session")
-    fun createSession() : Response {
+    private fun createSession() : Response {
         return sessionRepository.save(newSession()).mapToInfo()
     }
 
     @GetMapping("/session/{id}")
-    fun getSession(@PathVariable("id") sessionId: UUID) : Response {
+    private fun getSession(@PathVariable("id") sessionId: UUID) : Response {
         return sessionRepository.findById(sessionId)
                 .map { it.mapToInfo() }
                 .orElseGet{ NOT_FOUND_RESPONSE }
@@ -34,6 +34,6 @@ class ScrumSessionController (
 
 }
 
-fun newSession() : ScrumSession {
+private fun newSession() : ScrumSession {
     return ScrumSession(randomUUID())
 }
