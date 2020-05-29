@@ -23,5 +23,5 @@ class Task(
         @Id @GeneratedValue val id: Long? = null
 )
 
-interface TaskRepository : CrudRepository<Task, Long>
-interface TaskEstimationRepository : CrudRepository<TaskEstimation, Long>
+internal interface TaskRepository : CrudRepository<Task, Long>
+internal interface TaskEstimationRepository : CrudRepository<TaskEstimation, Long>
