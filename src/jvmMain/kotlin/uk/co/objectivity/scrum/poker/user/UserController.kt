@@ -14,7 +14,7 @@ data class UserRequest(val userName: String, val sessionId: String)
 @RestController
 private class UserController(
         val userRepository: UserRepository,
-        val sesssionRepository: SessionRepository) {
+        val sessionRepository: SessionRepository) {
 
     @GetMapping("/api/users/{id}")
     fun getUser(@PathVariable("id") userId: Long): UserResponse {
@@ -25,7 +25,7 @@ private class UserController(
 
     @PostMapping("/api/users")
     fun createUser(@RequestBody request: UserRequest): UserResponse {
-        return sesssionRepository.findById(UUID.fromString(request.sessionId))
+        return sessionRepository.findById(UUID.fromString(request.sessionId))
                 .map { userRepository.save(request.toEntity(it)) }
                 .map { it.toResponse() }
                 .orElse(UserResponse.Error("not found"))

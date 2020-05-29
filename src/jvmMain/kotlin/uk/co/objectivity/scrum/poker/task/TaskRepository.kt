@@ -12,16 +12,16 @@ import javax.persistence.OneToMany
 
 @Entity
 class TaskEstimation(
-        var value: Int,
-        @ManyToOne(fetch = FetchType.LAZY) @JsonIgnore var task: Task? = null,
-        @Id @GeneratedValue var id: Long? = null
+        val value: Int,
+        @ManyToOne(fetch = FetchType.LAZY) @JsonIgnore val task: Task? = null,
+        @Id @GeneratedValue val id: Long? = null
 )
 
 @Entity
 class Task(
-        var title: String,
-        @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true ) var estimations: MutableList<TaskEstimation> = mutableListOf(),
-        @Id @GeneratedValue var id: Long? = null
+        val title: String,
+        @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true ) val estimations: MutableList<TaskEstimation> = mutableListOf(),
+        @Id @GeneratedValue val id: Long? = null
 )
 
-interface TaskRepository : CrudRepository<Task, Long>
+internal interface TaskRepository : CrudRepository<Task, Long>
