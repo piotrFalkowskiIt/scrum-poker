@@ -1,4 +1,4 @@
-package uk.co.objectivity.odchlopa
+package uk.co.objectivity.scrum.poker
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
