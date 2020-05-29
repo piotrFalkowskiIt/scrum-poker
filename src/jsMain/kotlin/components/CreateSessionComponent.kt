@@ -9,19 +9,21 @@ import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import org.w3c.fetch.RequestInit
-import org.w3c.fetch.Response
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.input
 import react.dom.p
+import react.router.dom.redirect
 import kotlin.browser.window
 import kotlin.js.json
 
 data class SessionState(
         val name: String? = null,
-        var error: String? = null) : RState
+        var error: String? = null,
+        var redirect: String? = null
+) : RState
 
 data class CreateSessionRequest(val name: String)
 
@@ -41,27 +43,31 @@ class CreateSessionComponent : RComponent<RProps, SessionState>() {
             ))
                     .await()
                     .json()
-                    .then { Response.redirect("/join") }
+                    .then { setState(SessionState(redirect = "/join")) }
                     .catch { error -> setState({ it.copy(error = error.toString())}) }
         } ?: setState(SessionState(error = "Missing name"))
     }
 
 
     override fun RBuilder.render() {
-        p {
-            +"Error: ${state.error}"
-        }
-        input(type = InputType.text, name = "name") {
-            attrs {
-                onChangeFunction = this@CreateSessionComponent::handleNameChange
+        if (state.redirect != null) {
+            redirect(to = state.redirect!!)
+        } else {
+            p {
+                +"Error: ${state.error}"
             }
-        }
-        input(type = InputType.button) {
-            attrs {
-                onClickFunction = {
-                    createSessionAsync();
+            input(type = InputType.text, name = "name") {
+                attrs {
+                    onChangeFunction = this@CreateSessionComponent::handleNameChange
                 }
-                value = "Create session"
+            }
+            input(type = InputType.button) {
+                attrs {
+                    onClickFunction = {
+                        createSessionAsync()
+                    }
+                    value = "Create session"
+                }
             }
         }
     }
