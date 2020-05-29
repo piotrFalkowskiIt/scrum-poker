@@ -1,4 +1,4 @@
-package uk.co.objectivity.odchlopa.service
+package uk.co.objectivity.scrum.poker.service
 
 import org.junit.jupiter.api.Test
 
@@ -9,7 +9,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
-import uk.co.objectivity.odchlopa.repositories.ProductRepository
+import uk.co.objectivity.scrum.poker.repositories.ProductRepository
 
 @RunWith(MockitoJUnitRunner::class)
 internal class ServiceTest {

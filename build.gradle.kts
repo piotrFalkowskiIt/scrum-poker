@@ -65,7 +65,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
                 implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
                 implementation("org.springframework.boot:spring-boot-devtools")
-                runtimeOnly("org.postgresql:postgresql")
+                runtimeOnly("com.h2database:h2")
+                implementation("org.latencyutils:LatencyUtils:2.0.3")
                 implementation("org.springframework.boot:spring-boot-starter-test") {
                     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
                 }
@@ -125,7 +126,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 tasks.register<JavaExec>("run") {
     dependsOn(":backendJar")
-    main = "uk.co.objectivity.odchlopa.OdChlopaApplicationKt"
+    main = "uk.co.objectivity.scrum.poker.ScrumPokerApplicationKt"
 //    classpath(configurations.backendRuntimeClasspath, backendJar)
 //    args = []
 }

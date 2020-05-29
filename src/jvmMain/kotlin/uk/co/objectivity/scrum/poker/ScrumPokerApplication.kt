@@ -1,11 +1,11 @@
-package uk.co.objectivity.odchlopa
+package uk.co.objectivity.scrum.poker
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class OdChlopaApplication
+class ScrumPokerApplication
 
 fun main(args: Array<String>) {
-    runApplication<OdChlopaApplication>(*args)
+    runApplication<ScrumPokerApplication>(*args)
 }

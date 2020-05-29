@@ -1,4 +1,4 @@
-package uk.co.objectivity.odchlopa.controller
+package uk.co.objectivity.scrum.poker.controller
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController

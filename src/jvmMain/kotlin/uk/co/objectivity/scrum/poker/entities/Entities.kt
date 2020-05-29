@@ -1,4 +1,4 @@
-package uk.co.objectivity.odchlopa.entities
+package uk.co.objectivity.scrum.poker.entities
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

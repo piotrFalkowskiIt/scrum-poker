@@ -1,1 +1,1 @@
-rootProject.name = "od-chlopa"
+rootProject.name = "scrum.poker"
