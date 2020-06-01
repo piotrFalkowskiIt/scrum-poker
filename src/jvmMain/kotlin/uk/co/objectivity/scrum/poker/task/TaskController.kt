@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import uk.co.objectivity.scrum.poker.session.SessionRepository
-import java.util.*
+import java.util.UUID
 
 @RequestMapping("/api/task")
 @RestController
@@ -16,27 +16,38 @@ private class TaskController(val taskRepository: TaskRepository,
                              val sessionRepository: SessionRepository) {
 
     @GetMapping("/{id}")
-    fun getTaskSummary(@PathVariable id: Long) = taskRepository.findById(id)
+    private fun getTask(@PathVariable("id") taskId: UUID): TaskResponse =
+            taskRepository.findById(taskId)
+                    .map { it.toResponse() }
+                    .orElse(TaskResponse.Error("Task not found!"))
 
-    @PostMapping("/{sessionId}")
-    fun createTask(@PathVariable sessionId: UUID, @RequestBody task: Task) {
-        sessionRepository.findById(sessionId).ifPresent {
-            task.session = it
-            taskRepository.save(task)
-        }
-    }
-
-    @GetMapping("/{id}/estimation")
-    fun getTaskEstimations(@PathVariable id: Long): MutableList<TaskEstimation> =
-            taskRepository.findById(id).map(Task::estimations).orElse(mutableListOf())
+    @PostMapping
+    private fun createTask(@RequestBody request: NewTaskRequest): TaskResponse =
+            sessionRepository.findById(UUID.fromString(request.sessionId))
+                    .map { taskRepository.save(request.toEntity(it)) }
+                    .map { it.toResponse() }
+                    .orElse(TaskResponse.Error("Session not found!"))
 
     @PostMapping("/{id}/estimation")
-    fun addTaskEstimation(@PathVariable id: Long, @RequestBody taskEstimation: TaskEstimation) {
-        taskRepository.findById(id).ifPresent {
-            taskEstimation.task = it
-            taskEstimationRepository.save(taskEstimation)
-        }
-    }
+    private fun createTaskEstimation(@PathVariable("id") taskId: UUID, @RequestBody request: NewTaskEstimationRequest) : TaskEstimationResponse =
+            taskRepository.findById(taskId)
+                    .map { taskEstimationRepository.save(request.toEntity(it, request.userId)) }
+                    .map { it.toResponse() }
+                    .orElse(TaskEstimationResponse.Error("Task not found!"))
 
 }
+
+internal sealed class TaskResponse {
+    class Task(val id: UUID, val title: String, val estimations: List<TaskEstimationResponse>) : TaskResponse()
+    class Error(val error: String = "Unexpected error occurred") : TaskResponse()
+}
+
+internal sealed class TaskEstimationResponse {
+    class TaskEstimation(val taskId: UUID, val estimationValue: Int, val userId: Long) : TaskEstimationResponse()
+    class Error(val error: String = "Unexpected error occurred") : TaskEstimationResponse()
+}
+
+internal class NewTaskRequest(val sessionId: String, val taskTitle: String)
+
+internal class NewTaskEstimationRequest(val userId: Long, val estimationValue: Int)
 
